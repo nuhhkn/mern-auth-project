@@ -17,7 +17,7 @@ router.post('/register', async function (req, res) {
     if (email.length < 5) return res.status(404).json({ message: 'email length < 3' });
     if (req.body.password.length < 8) return res.status(404).json({ message: 'password length < 8' });
 
-    if (await User.findOne({ email: email })) return res.status(404).json({ message: 'email used' });
+    if (await User.findOne({ email: email })) return res.status(404).json({ message: '!user.email' });
 
     const data = new User({
       fullname,
@@ -40,9 +40,9 @@ router.post('/login', async function (req, res) {
     if (!email || !password) return res.status(404).json({ message: '!email || !password' })
    
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'email not used' });
+    if (!user) return res.status(404).json({ message: '!user.email' });
 
-    if (!bcrypt.compareSync(password, user.password)) return res.status(404).json({ message: 'password incorrect' });
+    if (!bcrypt.compareSync(password, user.password)) return res.status(404).json({ message: '!req.body.password === user.password' });
 
     return res.status(200).json({
       fullname: user.fullname,
@@ -59,7 +59,7 @@ router.post('/control', async function (req, res) {
     if (!_id) return res.status(404).json({ message: '!id' });
 
     const user = await User.findById(_id);
-    if (!user) return res.status(404).json({ message: 'id not found' });
+    if (!user) return res.status(404).json({ message: '!user.id' });
 
     return res.status(200).json(user);
   } catch(err) {
