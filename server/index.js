@@ -17,7 +17,7 @@ app.listen(process.env.PORT, () => {
    mongoose
       .connect(process.env.DB)
       .then(() => {
-         console.log(`Connected DB | URL: http://localhost:${process.env.PORT}`);
+         console.log(`App started | URL: http://localhost:${process.env.PORT}`);
       })
       .catch((err) => console.error(err));
 });
