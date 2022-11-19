@@ -5,50 +5,66 @@ import bcrypt from 'bcryptjs';
 const router = express.Router();
 
 router.post('/register', async function (req, res) {
-   const fullname = req.body.fullname,
-      email = req.body.email,
-      password = await bcrypt.hash(`${req.body.password}`, 10);
+  try {
+    const fullname = req.body.fullname,
+          email = req.body.email,
+          password = await bcrypt.hash(`${req.body.password}`, 10);
 
-   if (fullname.length < 3)
-      return res.status(404).json({ message: 'fullname length < 3' });
-   if (!isNaN(fullname)) return res.status(404).json({ message: '!isNaN(fullname)' });
-   if (email.length < 3) return res.status(404).json({ message: 'email length < 3' });
-   if (req.body.password.length < 8)
-      return res.status(404).json({ message: 'password length < 8' });
+    if (!fullname || !email || !password) return res.status(404).json({ message: '!fullname || !email || !password' });
 
-   if (await User.findOne({ email: email }))
-      return res.status(404).json({ message: 'email used' });
+    if (fullname.length < 3) return res.status(404).json({ message: 'fullname length < 3' });
+    if (!isNaN(fullname)) return res.status(404).json({ message: '!isNaN(fullname)' });
+    if (email.length < 5) return res.status(404).json({ message: 'email length < 3' });
+    if (req.body.password.length < 8) return res.status(404).json({ message: 'password length < 8' });
 
-   const data = new User({
+    if (await User.findOne({ email: email })) return res.status(404).json({ message: 'email used' });
+
+    const data = new User({
       fullname,
       email,
       password,
-   });
-   data.save();
+    });
+    data.save();
 
-   return res.status(200).json(req.body);
+    return res.status(200).json(req.body);
+  } catch(err) {
+    return res.status(404).json({ message: `[${err.name}] ${err.message}` });
+  }
 });
 
 router.post('/login', async function (req, res) {
-   const email = req.body.email,
-      password = req.body.password;
+  try {
+    const email = req.body.email,
+          password = req.body.password;
+
+    if (!email || !password) return res.status(404).json({ message: '!email || !password' })
    
-   const user = await User.findOne({ email });
-   if (!user) return res.status(404).json({ message: 'email not used' });
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'email not used' });
 
-   if (!bcrypt.compareSync(password, user.password))
-      return res.status(404).json({ message: 'password incorrect' });
+    if (!bcrypt.compareSync(password, user.password)) return res.status(404).json({ message: 'password incorrect' });
 
-   return res.status(200).json(user);
+    return res.status(200).json({
+      fullname: user.fullname,
+      email: user.email,
+      userType: user.userType, createdDate: user.createdDate});
+  } catch(err) {
+    return res.status(404).json({ message: `[${err.name}] ${err.message}` });
+  }
 });
 
-router.post('/userControl', async function (req, res) {
-   const _id = req.body.id;
+router.post('/control', async function (req, res) {
+  try {
+    const _id = req.body.id;
+    if (!_id) return res.status(404).json({ message: '!id' });
 
-   const user = await User.findById(_id);
-   if (!user) return res.status(404).json({ message: 'id not found' });
+    const user = await User.findById(_id);
+    if (!user) return res.status(404).json({ message: 'id not found' });
 
-   return res.status(200).json(user);
-})
+    return res.status(200).json(user);
+  } catch(err) {
+    return res.status(404).json({ message: `[${err.name}] ${err.message}` });
+  }
+});
 
 export default router;
