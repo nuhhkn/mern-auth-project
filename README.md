@@ -23,7 +23,7 @@ npm start
 ```
 
 ####  Editing config file
-`DB = MongoDB Connect URI`
+`db_connect_uri = MongoDB Connect URI`
 
 ###  To run the client:
 `COMING SOON`
