@@ -26,6 +26,6 @@ npm install
 npm start
 ```
 
-### To run the client
+## To run the client
 
 `COMING SOON`
