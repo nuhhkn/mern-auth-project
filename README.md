@@ -18,7 +18,7 @@ npm install
 ```
 
 ####  Editing config file
-`db_connect_uri = MongoDB Connect URI`
+`db_connect_uri` MongoDB Connect URI
 
 ####  Run the index.js file
 
