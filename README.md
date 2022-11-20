@@ -4,6 +4,7 @@ Hello, this project was developed using **MongoDB**, **Express**, **React** and 
 
 
 ###  To run the server:
+
 ####  Access the server folder
 
 ```
@@ -16,14 +17,14 @@ cd server
 npm install
 ```
 
+####  Editing config file
+`db_connect_uri = MongoDB Connect URI`
+
 ####  Run the index.js file
 
 ```
 npm start
 ```
-
-####  Editing config file
-`db_connect_uri = MongoDB Connect URI`
 
 ###  To run the client:
 `COMING SOON`
