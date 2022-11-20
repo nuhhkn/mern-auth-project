@@ -6,9 +6,8 @@ const router = express.Router();
 
 router.post('/register', async function (req, res) {
   try {
-    const fullname = req.body.fullname,
-          email = req.body.email,
-          password = await bcrypt.hash(`${req.body.password}`, 10);
+    const { fullname, email, password: psw } = req.body;  
+    const password = await bcrypt.hash(psw, 10);
 
     if (!fullname || !email || !password) return res.status(404).json({ message: '!fullname || !email || !password' });
 
@@ -27,15 +26,14 @@ router.post('/register', async function (req, res) {
     data.save();
 
     return res.status(200).json(req.body);
-  } catch(err) {
+  } catch (err) {
     return res.status(404).json({ message: `[${err.name}] ${err.message}` });
   }
 });
 
 router.post('/login', async function (req, res) {
   try {
-    const email = req.body.email,
-          password = req.body.password;
+    const { email, password } = req.body;
 
     if (!email || !password) return res.status(404).json({ message: '!email || !password' })
    
@@ -47,22 +45,29 @@ router.post('/login', async function (req, res) {
     return res.status(200).json({
       fullname: user.fullname,
       email: user.email,
-      userType: user.userType, createdDate: user.createdDate});
-  } catch(err) {
+      userType: user.userType,
+      createdDate: user.createdDate,
+    });
+  } catch (err) {
     return res.status(404).json({ message: `[${err.name}] ${err.message}` });
   }
 });
 
 router.post('/control', async function (req, res) {
   try {
-    const _id = req.body.id;
+    const { _id } = req.body;
     if (!_id) return res.status(404).json({ message: '!id' });
 
     const user = await User.findById(_id);
     if (!user) return res.status(404).json({ message: '!user.id' });
 
-    return res.status(200).json(user);
-  } catch(err) {
+    return res.status(200).json({
+      fullname: user.fullname,
+      email: user.email,
+      userType: user.userType,
+      createdDate: user.createdDate,
+    });
+  } catch (err) {
     return res.status(404).json({ message: `[${err.name}] ${err.message}` });
   }
 });
