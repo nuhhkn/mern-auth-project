@@ -14,10 +14,10 @@ app.use(express.json());
 app.use('/users', userRouter);
 
 app.listen(process.env.port, () => {
-   mongoose
-      .connect(process.env.db_connect_uri)
-      .then(() => {
-         console.log(`App started | URL: http://localhost:${process.env.PORT}`);
-      })
-      .catch((err) => console.error(err));
+  mongoose
+    .connect(process.env.db_connect_uri)
+    .then(() => {
+      console.log(`App started | URL: http://localhost:${process.env.PORT}`);
+    })
+    .catch((err) => console.error(err));
 });
