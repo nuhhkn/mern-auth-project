@@ -43,6 +43,7 @@ router.post('/login', async function (req, res) {
     if (!bcrypt.compareSync(password, user.password)) return res.status(404).json({ message: '!req.body.password === user.password' });
 
     return res.status(200).json({
+      id: _id,
       fullname: user.fullname,
       email: user.email,
       userType: user.userType,
@@ -55,13 +56,14 @@ router.post('/login', async function (req, res) {
 
 router.post('/control', async function (req, res) {
   try {
-    const { _id } = req.body;
+    const { id: _id } = req.body;
     if (!_id) return res.status(404).json({ message: '!id' });
 
     const user = await User.findById(_id);
     if (!user) return res.status(404).json({ message: '!user.id' });
 
     return res.status(200).json({
+      id: _id,
       fullname: user.fullname,
       email: user.email,
       userType: user.userType,
